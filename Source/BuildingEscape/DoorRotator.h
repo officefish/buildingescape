@@ -15,6 +15,7 @@ class BUILDINGESCAPE_API UDoorRotator : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UDoorRotator();
+	
 
 protected:
 	// Called when the game starts
@@ -30,4 +31,9 @@ private:
 	
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume * PressurePlate;
+
+	UPROPERTY(EditAnywhere)
+	AActor* ActorThatOpens;
+
+	void OpenDoor();
 };
