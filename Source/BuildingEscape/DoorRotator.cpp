@@ -20,6 +20,7 @@ void UDoorRotator::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
+	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
 	
 	
 }
