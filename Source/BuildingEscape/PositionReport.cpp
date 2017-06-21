@@ -22,7 +22,8 @@ void UPositionReport::BeginPlay()
 
 	// ...
 	FString ComponentName = GetOwner()->GetName();
-	UE_LOG(LogTemp, Warning, TEXT("Position Report for %s"), *ComponentName);
+	FString ComponentPosition = GetOwner()->GetTransform().GetLocation().ToString();
+	UE_LOG(LogTemp, Warning, TEXT("%s location is: %s"), *ComponentName, *ComponentPosition);
 	
 }
 
