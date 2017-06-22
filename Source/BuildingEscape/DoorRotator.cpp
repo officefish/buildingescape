@@ -21,14 +21,16 @@ void UDoorRotator::BeginPlay()
 
 	// ...
 	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
-	
+	Owner = GetOwner();
 	
 }
 
 void UDoorRotator::OpenDoor() {
-	AActor* Owner = GetOwner();
-	FRotator NewRotation = FRotator(0.f, -90.f, 0.f);
-	Owner->SetActorRotation(NewRotation);
+	Owner->SetActorRotation(FRotator(0.f, OpenAngle, 0.f));
+}
+
+void UDoorRotator::CloseDoor() {
+	Owner->SetActorRotation(FRotator(0.f, 0.f, 0.f));
 }
 
 
