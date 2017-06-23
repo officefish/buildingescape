@@ -34,4 +34,6 @@ private:
 
 	void InitAttachedPhysicsHandle();
 	void InitAttachedInput();
+
+	const FHitResult GetFirstPhysicsBodyInReach();
 };
