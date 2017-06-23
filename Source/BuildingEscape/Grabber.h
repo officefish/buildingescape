@@ -35,5 +35,8 @@ private:
 	void InitAttachedPhysicsHandle();
 	void InitAttachedInput();
 
+	FVector GetReachLineStart();
+	FVector GetReachLineEnd();
+
 	const FHitResult GetFirstPhysicsBodyInReach();
 };
