@@ -82,11 +82,26 @@ const FHitResult UGrabber::GetFirstPhysicsBodyInReach()
 
 void UGrabber::GrabInputPressed() {
 	UE_LOG(LogTemp, Warning, TEXT("Grab pressed in %s"), *(GetOwner()->GetName()))
-	GetFirstPhysicsBodyInReach();
+
+	auto HitResult = GetFirstPhysicsBodyInReach();
+	auto ComponentToGrab = HitResult.GetComponent();
+	auto ActorHit = HitResult.GetActor();
+	FVector ComponentToGrabOwnerLocation = ComponentToGrab->GetOwner()->GetActorLocation();
+
+	if (ActorHit) {
+		PhysicsHandle->GrabComponent(
+			ComponentToGrab,
+			NAME_None,
+			ComponentToGrabOwnerLocation,
+			true // allow rotation
+		);
+	}
+
 }
 
 void UGrabber::GrabInputReleased() {
 	UE_LOG(LogTemp, Warning, TEXT("Grab released in %s"), *(GetOwner()->GetName()))
+		PhysicsHandle->ReleaseComponent();
 }
 
 
@@ -96,5 +111,17 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+	FVector PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
+		OUT PlayerViewPointLocation,
+		OUT PlayerViewPointRotation
+		);
+
+	FVector LineTraceEnd = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * DebugLineVectorReach;
+
+	if (PhysicsHandle->GrabbedComponent) {
+		PhysicsHandle->SetTargetLocation(LineTraceEnd);
+	}
 	
 }
