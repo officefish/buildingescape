@@ -31,4 +31,7 @@ private:
 
 	void GrabInputPressed();
 	void GrabInputReleased();
+
+	void InitAttachedPhysicsHandle();
+	void InitAttachedInput();
 };
