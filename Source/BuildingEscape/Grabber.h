@@ -27,5 +27,8 @@ public:
 private:
 	float DebugLineVectorReach = 100.f;
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
+	UInputComponent * Input = nullptr;
+
+	void GrabInputListener();
 	
 };
