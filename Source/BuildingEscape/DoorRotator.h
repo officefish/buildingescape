@@ -37,9 +37,9 @@ private:
 
 	float LastDoorOpenTime;
 
-	AActor* ActorThatOpens;
 	AActor* Owner;
 
 	void OpenDoor();
 	void CloseDoor();
+	float GetTotalMassOfActorsOnPlane();
 };

@@ -3,6 +3,8 @@
 #include "DoorRotator.h"
 #include "Gameframework/Actor.h"
 
+#define OUT
+
 // Sets default values for this component's properties
 UDoorRotator::UDoorRotator()
 {
@@ -20,7 +22,6 @@ void UDoorRotator::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
 	Owner = GetOwner();
 	
 }
@@ -40,7 +41,7 @@ void UDoorRotator::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
-	if (PressurePlate->IsOverlappingActor(ActorThatOpens)) {
+	if (GetTotalMassOfActorsOnPlane() > 30.f) {
 		OpenDoor();
 		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
 	}
@@ -48,5 +49,19 @@ void UDoorRotator::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 	if (GetWorld()->GetTimeSeconds() - LastDoorOpenTime > CloseDoorDelay) {
 		CloseDoor();
 	}
+}
+
+float UDoorRotator::GetTotalMassOfActorsOnPlane() {
+	float TotalMass = 0.f;
+	TArray<AActor*> OverlappingActors;
+	PressurePlate->GetOverlappingActors(OUT OverlappingActors);
+
+	for (const auto& Actor : OverlappingActors)
+	{
+		//TotalMass += 
+		TotalMass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+		UE_LOG(LogTemp, Warning, TEXT("Overlapping Actor is %s"), *(Actor->GetName()))
+	}
+	return TotalMass;
 }
 
