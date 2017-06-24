@@ -29,7 +29,7 @@ void UGrabber::InitAttachedPhysicsHandle()
 {
 	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
 	if (PhysicsHandle == nullptr) {
-		UE_LOG(LogTemp, Error, TEXT("PhysicsHandleComponent missing in %s"), *(GetOwner()->GetName()))
+		LogPhysicsHandleMissingError();
 	}
 }
 void UGrabber::InitAttachedInput()
@@ -44,8 +44,6 @@ void UGrabber::InitAttachedInput()
 	}
 
 }
-
-
 
 const FHitResult UGrabber::GetFirstPhysicsBodyInReach()
 {
@@ -75,6 +73,11 @@ void UGrabber::GrabInputPressed() {
 	auto HitResult = GetFirstPhysicsBodyInReach();
 	auto ComponentToGrab = HitResult.GetComponent();
 	auto ActorHit = HitResult.GetActor();
+
+	if (PhysicsHandle == nullptr) {
+		LogPhysicsHandleMissingError();
+		return;
+	}
 	
 	if (ActorHit) {
 		PhysicsHandle->GrabComponentAtLocationWithRotation(
@@ -88,6 +91,10 @@ void UGrabber::GrabInputPressed() {
 }
 
 void UGrabber::GrabInputReleased() {
+	if (PhysicsHandle == nullptr) {
+		LogPhysicsHandleMissingError();
+		return;
+	}
 	PhysicsHandle->ReleaseComponent();
 }
 
@@ -98,6 +105,10 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+	if (PhysicsHandle == nullptr) {
+		LogPhysicsHandleMissingError();
+		return;
+	}
 	if (PhysicsHandle->GrabbedComponent) {
 		PhysicsHandle->SetTargetLocation(GetReachLineEnd());
 	}
@@ -126,4 +137,8 @@ FVector UGrabber::GetReachLineEnd()
 		);
 
 	return PlayerViewPointLocation + PlayerViewPointRotation.Vector() * DebugLineVectorReach;
+}
+
+void UGrabber::LogPhysicsHandleMissingError() {
+	UE_LOG(LogTemp, Error, TEXT("PhysicsHandleComponent missing in %s"), *(GetOwner()->GetName()))
 }

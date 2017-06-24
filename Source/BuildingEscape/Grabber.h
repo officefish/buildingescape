@@ -35,6 +35,8 @@ private:
 	void InitAttachedPhysicsHandle();
 	void InitAttachedInput();
 
+	void LogPhysicsHandleMissingError();
+
 	FVector GetReachLineStart();
 	FVector GetReachLineEnd();
 

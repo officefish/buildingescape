@@ -20,18 +20,14 @@ UDoorRotator::UDoorRotator()
 void UDoorRotator::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
-	Owner = GetOwner();
-	
 }
 
 void UDoorRotator::OpenDoor() {
-	Owner->SetActorRotation(FRotator(0.f, OpenAngle, 0.f));
+	GetOwner()->SetActorRotation(FRotator(0.f, OpenAngle, 0.f));
 }
 
 void UDoorRotator::CloseDoor() {
-	Owner->SetActorRotation(FRotator(0.f, 0.f, 0.f));
+	GetOwner()->SetActorRotation(FRotator(0.f, 0.f, 0.f));
 }
 
 
@@ -53,14 +49,18 @@ void UDoorRotator::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 
 float UDoorRotator::GetTotalMassOfActorsOnPlane() {
 	float TotalMass = 0.f;
+	
+	if (PressurePlate == nullptr) {
+		UE_LOG(LogTemp, Error, TEXT("PressurePlate not init in %s"), *(GetOwner()->GetName()))
+		return TotalMass;
+	}
+		
 	TArray<AActor*> OverlappingActors;
 	PressurePlate->GetOverlappingActors(OUT OverlappingActors);
 
 	for (const auto& Actor : OverlappingActors)
 	{
-		//TotalMass += 
 		TotalMass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
-		UE_LOG(LogTemp, Warning, TEXT("Overlapping Actor is %s"), *(Actor->GetName()))
 	}
 	return TotalMass;
 }
