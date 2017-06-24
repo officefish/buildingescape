@@ -23,7 +23,7 @@ void UDoorRotator::BeginPlay()
 }
 
 void UDoorRotator::OpenDoor() {
-	GetOwner()->SetActorRotation(FRotator(0.f, OpenAngle, 0.f));
+	OnOpenRequest.Broadcast();
 }
 
 void UDoorRotator::CloseDoor() {

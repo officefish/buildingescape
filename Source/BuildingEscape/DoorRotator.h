@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "DoorRotator.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOpenRequest);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BUILDINGESCAPE_API UDoorRotator : public UActorComponent
@@ -15,6 +16,9 @@ class BUILDINGESCAPE_API UDoorRotator : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UDoorRotator();
+
+	UPROPERTY(BlueprintAssignable)
+	FOnOpenRequest OnOpenRequest;
 	
 
 protected:
