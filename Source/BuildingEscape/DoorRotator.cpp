@@ -20,14 +20,9 @@ UDoorRotator::UDoorRotator()
 void UDoorRotator::BeginPlay()
 {
 	Super::BeginPlay();
-}
-
-void UDoorRotator::OpenDoor() {
-	OnOpenRequest.Broadcast();
-}
-
-void UDoorRotator::CloseDoor() {
-	GetOwner()->SetActorRotation(FRotator(0.f, 0.f, 0.f));
+	if (PressurePlate == nullptr) {
+		UE_LOG(LogTemp, Error, TEXT("PressurePlate not init in %s"), *(GetOwner()->GetName()))
+	}
 }
 
 
@@ -37,13 +32,10 @@ void UDoorRotator::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
-	if (GetTotalMassOfActorsOnPlane() > 30.f) {
-		OpenDoor();
-		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
-	}
-
-	if (GetWorld()->GetTimeSeconds() - LastDoorOpenTime > CloseDoorDelay) {
-		CloseDoor();
+	if (GetTotalMassOfActorsOnPlane() > TriggerMass) {
+		OnOpenEvent.Broadcast();
+	} else {
+		OnCloseEvent.Broadcast();
 	}
 }
 
@@ -51,7 +43,6 @@ float UDoorRotator::GetTotalMassOfActorsOnPlane() {
 	float TotalMass = 0.f;
 	
 	if (PressurePlate == nullptr) {
-		UE_LOG(LogTemp, Error, TEXT("PressurePlate not init in %s"), *(GetOwner()->GetName()))
 		return TotalMass;
 	}
 		

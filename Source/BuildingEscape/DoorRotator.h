@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "DoorRotator.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOpenRequest);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDoorEvent);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BUILDINGESCAPE_API UDoorRotator : public UActorComponent
@@ -18,7 +18,10 @@ public:
 	UDoorRotator();
 
 	UPROPERTY(BlueprintAssignable)
-	FOnOpenRequest OnOpenRequest;
+	FDoorEvent OnOpenEvent;
+
+	UPROPERTY(BlueprintAssignable)
+	FDoorEvent OnCloseEvent;
 	
 
 protected:
@@ -31,17 +34,10 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere)
-	float OpenAngle = -90.0f;
+	float TriggerMass = 30.0f;
 	
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume * PressurePlate = nullptr;
 
-	UPROPERTY(EditAnywhere)
-	float CloseDoorDelay = 0.7f;
-
-	float LastDoorOpenTime;
-
-	void OpenDoor();
-	void CloseDoor();
 	float GetTotalMassOfActorsOnPlane();
 };
